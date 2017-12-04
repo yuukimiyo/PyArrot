@@ -1,8 +1,5 @@
 # PyArrot
-Write with Intaractive mode to try and error, Use batch mode to product or the cron.
-
-## What is it
-PyArrot is help module for your development.
+Write with interactive mode for trial and error, Get the batch mode for cron or other automation.
 
 ## Main Features
 * easy to define interactive prompt to your software.
