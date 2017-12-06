@@ -30,23 +30,45 @@ class pyarrot():
         # maybe this cause of some delay of logger output
         self.command_delay = 0.1
     
-    def dateValueInputByPrompt(self, message='', batchArgName='', default='', date_format='%Y/%m/%d'):
-        ''' Return Date value from inputted str. '''
+    def inputDate(self, message='', defaultValue='', batchArgStr='', date_format='%Y/%m/%d'):
+        '''
+        @param message
+        @param defaultValue
+        @param batchArgStr
+        @param date_format '%Y/%m/%d'
+        @return Inputed date object.
+        
+        1, Show message that request a formatted date strings.
+        2, Return Date object.
+        '''
         target_date = None
         while target_date==None:
             try:
-                inputted_str = self.valueInputByPrompt(message, batchArgName, default)
+                inputted_str = self.inputValue(message, defaultValue, batchArgStr)
+            except Exception as e:
+                print("input error: %s" % e)
+                continue
+            
+            try:
                 target_date = datetime.datetime.strptime(inputted_str, date_format)
-            except:
-                pass
+            except Exception as e:
+                print("date format error: %s" % e)
+            
         return target_date
     
-    def fileSelectByPrompt(self, target_dir='', message='', batchArgName='', default='', reject_pattern='^_', all_choice=False):
+    def selectFile(self, message='', target_dir='', defaultValue='', batchArgStr='', reject_pattern='^_', all_choice=False):
         '''
-        1, View filelist of target_dir.
-        2, View Message to Ask to Input the file-number in filelist.
+        @param message
+        @param target_dir
+        @param defaultValue
+        @param batchArgStr
+        @param reject_pattern
+        @param all_choice
+        @return filename strings
         
-        if all_choice are True, return array.
+        1, View file-list of target_dir.
+        2, View a message that ask to the file-number in file-list.
+        3, Return selected filename strings.
         '''
         
         filelist = []
@@ -67,7 +89,7 @@ class pyarrot():
         target_file = ''
         while target_file=='':
             try:
-                file_no = int(self.valueInputByPrompt(message, batchArgName, default))
+                file_no = int(self.inputValue(message, defaultValue, batchArgStr))
                 if all_choice:
                     if file_no == 0:
                         return filelist
@@ -82,14 +104,22 @@ class pyarrot():
         else:
             return target_file
 
-    def valueInputByPrompt(self, message='', batchArgName='', default=''):
+    def inputValue(self, message='', defaultValue='', batchArgStr=''):
         '''
+        @param message
+        @param defaultValue
+        @param batchArgStr
+        @return value
+        
         If in Interactive mode, Return value that inputted by prompt.
         If in Batch mode, Return value that commandline Arg.
+        
+        1, Show message that request to input a value.
+        2, Return the inputed value.
         '''
 
         if self.isBatchMode():
-            val = self.getArgValue(batchArgName)
+            val = self.getArgValue(batchArgStr)
         else:
             time.sleep(self.command_delay)
             val = input(message)
@@ -97,10 +127,14 @@ class pyarrot():
         if len(val) > 0:
             return val
         else:
-            return default
+            return defaultValue
 
     def addFunction(self, triggerWord, description, stackfunction):
         '''
+        @param triggerWord
+        @param description
+        @param stackfunction
+        
         Define The function for bach/Interactive mode.
         '''
         self.functionStacker.append({'trigger':triggerWord, 'description':description, 'function':stackfunction})
@@ -129,6 +163,8 @@ class pyarrot():
 
     def isBatchMode(self):
         '''
+        @return boolean
+        
         Check Args to get program mode.
         '''
         
@@ -184,6 +220,8 @@ class pyarrot():
                         break
         except KeyboardInterrupt:
             print("Quit by user command(CTRL-C).")
+        except Exception as e:
+            print("Unknown Error(%s)." % e)
 
     def startBatchMode(self):
         """
@@ -201,6 +239,9 @@ class pyarrot():
     
     def getArgValue(self, key):
         """
+        @param key Is argument key strings
+        @return argument value
+        
         Return the values which separate '='.
         If no '=' return ''.
         """
@@ -213,6 +254,9 @@ class pyarrot():
     
     def existArg(self, key):
         """
+        @param key Is argument key strings
+        @return boolean
+        
         If Args have key value, return True.
         """
         if len(sys.argv) > 1:
