@@ -1,12 +1,12 @@
 # PyArrot
-Write with interactive mode for trial and error, Get the batch mode for cron or other automation.
+Helper functions for interactive mode.
 
 ## Main Features
-* easy to define interactive prompt to your software.
-* easy to add batch mode.
+* Easy to define interactive mode.
+* Easy to define batch mode.
 
 ## Installation
-Use PyArrot as local module.
+pip install pyarrot
 
 ## License
 MIT License

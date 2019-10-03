@@ -7,9 +7,9 @@ def _requires_from_file(filename):
 
 setup(
     name='pyarrot',
-    version='0.1.0',
-    description='Write with interactive mode for trial and error, Get the batch mode for cron or other automation.',
-    long_description='Write with interactive mode for trial and error, Get the batch mode for cron or other automation.',
+    version='0.1.2',
+    description='Helper functions for interactive mode.',
+    long_description='Helper functions for interactive mode.',
     author='yuuki miyoshi',
     author_email='yuuki.miyo@gmail.com',
     url='https://github.com/yuukimiyo/PyArrot',
